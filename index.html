@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중1 정보 - 디지털 표현 수행평가 대비</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Noto Sans KR) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        },
+                        zone: '#ffedd5',
+                        digit: '#f3e8ff',
+                        control: '#fef9c3'
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 기본 스크롤바 디자인 및 태블릿 최적화 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        input[type="text"], input[type="number"] {
+            user-select: text;
+            -webkit-user-select: text;
+        }
+        /* 아스키 코드 표 스타일 */
+        .ascii-table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .ascii-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.75rem;
+            width: 100%;
+            min-width: 720px;
+        }
+        .ascii-table th, .ascii-table td {
+            border: 1px solid #cbd5e1;
+            text-align: center;
+            padding: 4px 2px;
+            font-family: monospace;
+            font-weight: 600;
+        }
+        .ascii-table .zone-header {
+            background-color: #fed7aa;
+            color: #9a3412;
+        }
+        .ascii-table .digit-header {
+            background-color: #e9d5ff;
+            color: #6b21a8;
+        }
+        .ascii-table .ctrl-cell {
+            background-color: #fef08a;
+            color: #854d0e;
+        }
+        .ascii-table .highlight-cell {
+            background-color: #fef08a !important;
+            box-shadow: inset 0 0 0 2px #ef4444;
+            animation: pulse-border 1.5s infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: #ef4444; }
+            50% { border-color: #3b82f6; }
+        }
+        .touch-btn {
+            touch-action: manipulation;
+            transition: all 0.15s ease-in-out;
+        }
+        .touch-btn:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- 상단 헤더 & 네비게이션 -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xl shadow-md">
+                    <i class="fa-solid fa-laptop-code"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight text-slate-800">중1 정보 디지털 표현</h1>
+                    <p class="text-xs text-slate-500 font-medium">수행평가 완벽 대비를 위해 문제를 해결하세요!</p>
+                </div>
+            </div>
+
+            <!-- 우측 QR 모달 & 리셋 버튼 -->
+            
+            </div>
+        </div>
+
+        <!-- 단계 진행 프로그레스 바 -->
+        <div class="bg-slate-100 border-t border-slate-200">
+            <div class="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between text-xs font-bold">
+                <div id="step-tab-1" onclick="goToStep(1)" class="step-tab flex-1 text-center py-1.5 rounded-lg bg-blue-600 text-white shadow-sm transition-all cursor-pointer">
+                    1. 자료의 단위
+                </div>
+                <div class="w-4 text-center text-slate-300"><i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+                <div id="step-tab-2" onclick="goToStep(2)" class="step-tab flex-1 text-center py-1.5 rounded-lg text-slate-500 bg-white border border-slate-200 transition-all cursor-pointer hover:bg-slate-50">
+                    2. 숫자의 표현
+                </div>
+                <div class="w-4 text-center text-slate-300"><i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+                <div id="step-tab-3" onclick="goToStep(3)" class="step-tab flex-1 text-center py-1.5 rounded-lg text-slate-500 bg-white border border-slate-200 transition-all cursor-pointer hover:bg-slate-50">
+                    3. 문자의 표현
+                </div>
+                <div class="w-4 text-center text-slate-300"><i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+                <div id="step-tab-4" onclick="goToStep(4)" class="step-tab flex-1 text-center py-1.5 rounded-lg text-slate-500 bg-white border border-slate-200 transition-all cursor-pointer hover:bg-slate-50">
+                    4. 이미지 표현
+                </div>
+                <div class="w-4 text-center text-slate-300"><i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+                <div id="step-tab-5" onclick="goToStep(5)" class="step-tab flex-1 text-center py-1.5 rounded-lg text-slate-500 bg-white border border-slate-200 transition-all cursor-pointer hover:bg-slate-50">
+                    5. 성적 리포트
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 메인 콘텐츠 영역 -->
+    <main class="max-w-5xl mx-auto px-4 py-6 w-full flex-grow">
+
+        <!-- ==================== STEP 1: 자료의 단위 ==================== -->
+        <section id="step-1" class="step-container space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between border-b pb-4 mb-5">
+                    <span class="bg-blue-100 text-blue-700 font-extrabold px-3 py-1 rounded-full text-sm">문제 01</span>
+                    <h2 class="text-xl font-bold text-slate-800">자료의 단위</h2>
+                </div>
+
+                <!-- 소문항 1 -->
+                <div class="mb-8 bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 mb-3 text-base flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">1</span>
+                        다음 설명에 알맞은 디지털 자료 표현 단위를 입력하세요.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-xs">
+                            <p class="text-sm text-slate-600 mb-2">① 컴퓨터에서 정보를 표현하는 <strong>최소 단위</strong></p>
+                            <input type="text" id="q1-1-1" placeholder="단위 입력" class="w-full border-2 border-slate-300 rounded-lg p-3 text-base font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-xs">
+                            <p class="text-sm text-slate-600 mb-2">② <strong>8개의 비트</strong>가 모인 단위 (문자 1개 표현 가능)</p>
+                            <input type="text" id="q1-1-2" placeholder="단위 입력" class="w-full border-2 border-slate-300 rounded-lg p-3 text-base font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 소문항 2 -->
+                <div class="mb-8 bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 mb-3 text-base flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">2</span>
+                        자료 용량 단위를 작은 것부터 큰 순서대로 바르게 나열하세요.
+                    </p>
+                    <div class="bg-white p-4 rounded-lg border border-slate-200">
+                        <p class="text-xs text-slate-500 mb-3"><i class="fa-solid fa-circle-info mr-1"></i> 순서대로 빈칸에 알맞은 단위를 입력하세요.</p>
+                        <div class="flex flex-wrap items-center justify-center gap-2 my-2">
+                            <div class="border-2 border-blue-400 bg-blue-50 px-4 py-2 rounded-lg font-bold text-blue-700">Byte</div>
+                            <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                            <input type="text" id="q1-2-1" placeholder="입력" class="w-16 border-2 border-slate-300 rounded-lg p-2 font-bold text-center text-slate-700 bg-white uppercase focus:border-blue-500 focus:outline-none">
+                            <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                            <input type="text" id="q1-2-2" placeholder="입력" class="w-16 border-2 border-slate-300 rounded-lg p-2 font-bold text-center text-slate-700 bg-white uppercase focus:border-blue-500 focus:outline-none">
+                            <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                            <input type="text" id="q1-2-3" placeholder="입력" class="w-16 border-2 border-slate-300 rounded-lg p-2 font-bold text-center text-slate-700 bg-white uppercase focus:border-blue-500 focus:outline-none">
+                            <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                            <input type="text" id="q1-2-4" placeholder="입력" class="w-16 border-2 border-slate-300 rounded-lg p-2 font-bold text-center text-slate-700 bg-white uppercase focus:border-blue-500 focus:outline-none">
+                            <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                            <input type="text" id="q1-2-5" placeholder="입력" class="w-16 border-2 border-slate-300 rounded-lg p-2 font-bold text-center text-slate-700 bg-white uppercase focus:border-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 소문항 3 -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 mb-3 text-base flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">3</span>
+                        다음 빈칸에 들어갈 숫자를 구하세요.
+                    </p>
+                    <div class="bg-white p-4 rounded-lg border border-slate-200 flex flex-wrap items-center gap-3">
+                        <span class="font-bold text-lg">2,048 KB = </span>
+                        <input type="number" id="q1-3" placeholder="숫자" class="w-28 border-2 border-slate-300 rounded-lg p-2.5 text-center text-lg font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                        <span class="font-bold text-lg">MB</span>
+                    </div>
+                </div>
+
+                <!-- 해설 및 정답 체크 영역 -->
+                <div id="explain-1" class="hidden mt-6 p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3">
+                    <div class="font-bold text-lg border-b border-emerald-200 pb-2 flex items-center justify-between">
+                        <span><i class="fa-solid fa-square-check text-emerald-600 mr-2"></i>1번 정답 및 단계별 해설</span>
+                        <span id="score-badge-1" class="text-sm px-3 py-1 bg-emerald-200 text-emerald-800 rounded-full font-extrabold"></span>
+                    </div>
+                    <ul class="list-disc list-inside text-sm space-y-1.5 leading-relaxed">
+                        <li><strong>(1) 최소 단위:</strong> 비트(bit), <strong>8개 비트 모임:</strong> 바이트(Byte) 또는 B 입니다.</li>
+                        <li><strong>(2) 용량 단위 순서:</strong> KB (킬로바이트) → MB (메가바이트) → GB (기가바이트) → TB (테라바이트) → PB (페타바이트)</li>
+                        <li><strong>(3) 단위 계산:</strong> 1,024 KB = 1 MB 이므로, 2,048 KB ÷ 1,024 = <strong>2 MB</strong> 입니다.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 하단 버튼 -->
+            <div class="flex justify-between items-center">
+                <div></div>
+                <div class="flex gap-3">
+                    <button onclick="checkStep1()" class="touch-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-check"></i> 정답 확인 및 해설
+                    </button>
+                    <button id="next-btn-1" onclick="goToStep(2)" disabled class="touch-btn bg-slate-300 text-slate-500 font-bold px-6 py-3 rounded-xl cursor-not-allowed flex items-center gap-2">
+                        다음 문제로 이동 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== STEP 2: 숫자의 디지털 표현 ==================== -->
+        <section id="step-2" class="step-container hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between border-b pb-4 mb-5">
+                    <span class="bg-blue-100 text-blue-700 font-extrabold px-3 py-1 rounded-full text-sm">문제 02</span>
+                    <h2 class="text-xl font-bold text-slate-800">숫자의 디지털 표현 (이진수와 십진수)</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Q2-1 -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <label class="block font-bold text-slate-800 mb-2">
+                            (1) 이진수 1110<sub>(2)</sub>을 십진수로 변환하세요.
+                        </label>
+                        <div class="flex items-center gap-2 mt-3">
+                            <span class="text-sm font-semibold text-slate-500">1110<sub>(2)</sub> =</span>
+                            <input type="number" id="q2-1" placeholder="십진수 입력" class="flex-1 border-2 border-slate-300 rounded-lg p-3 font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                            <span class="text-sm font-semibold text-slate-500"><sub>(10)</sub></span>
+                        </div>
+                    </div>
+
+                    <!-- Q2-2 -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <label class="block font-bold text-slate-800 mb-2">
+                            (2) 십진수 35를 이진수로 변환하세요.
+                        </label>
+                        <div class="flex items-center gap-2 mt-3">
+                            <span class="text-sm font-semibold text-slate-500">35<sub>(10)</sub> =</span>
+                            <input type="text" id="q2-2" placeholder="이진수 입력 (예: 100011)" class="flex-1 border-2 border-slate-300 rounded-lg p-3 font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                            <span class="text-sm font-semibold text-slate-500"><sub>(2)</sub></span>
+                        </div>
+                    </div>
+
+                    <!-- Q2-3 -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <label class="block font-bold text-slate-800 mb-2">
+                            (3) 이진수 101101011<sub>(2)</sub>을 십진수로 변환하세요.
+                        </label>
+                        <div class="flex items-center gap-2 mt-3">
+                            <span class="text-sm font-semibold text-slate-500">101101011<sub>(2)</sub> =</span>
+                            <input type="number" id="q2-3" placeholder="십진수 입력" class="flex-1 border-2 border-slate-300 rounded-lg p-3 font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                            <span class="text-sm font-semibold text-slate-500"><sub>(10)</sub></span>
+                        </div>
+                    </div>
+
+                    <!-- Q2-4 -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <label class="block font-bold text-slate-800 mb-2">
+                            (4) 십진수 126을 이진수로 변환하세요.
+                        </label>
+                        <div class="flex items-center gap-2 mt-3">
+                            <span class="text-sm font-semibold text-slate-500">126<sub>(10)</sub> =</span>
+                            <input type="text" id="q2-4" placeholder="이진수 입력" class="flex-1 border-2 border-slate-300 rounded-lg p-3 font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                            <span class="text-sm font-semibold text-slate-500"><sub>(2)</sub></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 해설 영역 -->
+                <div id="explain-2" class="hidden mt-6 p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3">
+                    <div class="font-bold text-lg border-b border-emerald-200 pb-2 flex items-center justify-between">
+                        <span><i class="fa-solid fa-square-check text-emerald-600 mr-2"></i>2번 정답 및 단계별 풀이</span>
+                        <span id="score-badge-2" class="text-sm px-3 py-1 bg-emerald-200 text-emerald-800 rounded-full font-extrabold"></span>
+                    </div>
+                    <div class="text-sm space-y-2 leading-relaxed">
+                        <p><strong>(1) 1110<sub>(2)</sub>:</strong> (1×8) + (1×4) + (1×2) + (0×1) = 8 + 4 + 2 + 0 = <strong>14</strong></p>
+                        <p><strong>(2) 35<sub>(10)</sub>:</strong> 32 + 2 + 1 = 2<sup>5</sup> + 2<sup>1</sup> + 2<sup>0</sup> → <strong>100011<sub>(2)</sub></strong></p>
+                        <p><strong>(3) 101101011<sub>(2)</sub>:</strong> 256 + 64 + 32 + 8 + 2 + 1 = <strong>363</strong></p>
+                        <p><strong>(4) 126<sub>(10)</sub>:</strong> 64 + 32 + 16 + 8 + 4 + 2 = <strong>1111110<sub>(2)</sub></strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 버튼 -->
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(1)" class="touch-btn bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-3 rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> 이전 문제
+                </button>
+                <div class="flex gap-3">
+                    <button onclick="checkStep2()" class="touch-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-check"></i> 정답 확인 및 해설
+                    </button>
+                    <button id="next-btn-2" onclick="goToStep(3)" disabled class="touch-btn bg-slate-300 text-slate-500 font-bold px-6 py-3 rounded-xl cursor-not-allowed flex items-center gap-2">
+                        다음 문제로 이동 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== STEP 3: 문자의 디지털 표현 (ASCII 표) ==================== -->
+        <section id="step-3" class="step-container hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between border-b pb-4 mb-4">
+                    <span class="bg-blue-100 text-blue-700 font-extrabold px-3 py-1 rounded-full text-sm">문제 03</span>
+                    <h2 class="text-xl font-bold text-slate-800">문자의 디지털 표현 (아스키 코드표)</h2>
+                </div>
+
+                <!-- 아스키 코드표 [보기] 박스 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-300 mb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-table-cells text-blue-600"></i> [보기] 아스키 코드표 (ASCII Code Table)
+                        </h3>
+                        <div class="flex gap-2 text-xs">
+                            <span class="px-2 py-1 rounded bg-orange-200 text-orange-900 font-bold">ZONE (상위 3비트)</span>
+                            <span class="px-2 py-1 rounded bg-purple-200 text-purple-900 font-bold">DIGIT (하위 4비트)</span>
+                            <span class="px-2 py-1 rounded bg-yellow-200 text-yellow-900 font-bold">제어 문자</span>
+                        </div>
+                    </div>
+
+                    <!-- 실제 표 구현 -->
+                    <div class="ascii-table-container bg-white rounded-lg shadow-inner p-1">
+                        <table class="ascii-table">
+                            <thead>
+                                <tr>
+                                    <th class="zone-header" rowspan="2" style="width:70px;">
+                                        <div class="text-[10px]">ZONE</div>
+                                        <div class="text-[9px] font-normal">상위3비트</div>
+                                    </th>
+                                    <th class="digit-header" style="width:40px;">DIGIT</th>
+                                    <th class="digit-header">0000</th>
+                                    <th class="digit-header">0001</th>
+                                    <th class="digit-header">0010</th>
+                                    <th class="digit-header">0011</th>
+                                    <th class="digit-header">0100</th>
+                                    <th class="digit-header">0101</th>
+                                    <th class="digit-header">0110</th>
+                                    <th class="digit-header">0111</th>
+                                    <th class="digit-header">1000</th>
+                                    <th class="digit-header">1001</th>
+                                    <th class="digit-header">1010</th>
+                                    <th class="digit-header">1011</th>
+                                    <th class="digit-header">1100</th>
+                                    <th class="digit-header">1101</th>
+                                    <th class="digit-header">1110</th>
+                                    <th class="digit-header">1111</th>
+                                </tr>
+                                <tr>
+                                    <th class="digit-header text-[10px]">16진수</th>
+                                    <th class="digit-header">0</th>
+                                    <th class="digit-header">1</th>
+                                    <th class="digit-header">2</th>
+                                    <th class="digit-header">3</th>
+                                    <th class="digit-header">4</th>
+                                    <th class="digit-header">5</th>
+                                    <th class="digit-header">6</th>
+                                    <th class="digit-header">7</th>
+                                    <th class="digit-header">8</th>
+                                    <th class="digit-header">9</th>
+                                    <th class="digit-header">A</th>
+                                    <th class="digit-header">B</th>
+                                    <th class="digit-header">C</th>
+                                    <th class="digit-header">D</th>
+                                    <th class="digit-header">E</th>
+                                    <th class="digit-header">F</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Row 0 (000) -->
+                                <tr>
+                                    <td class="zone-header">000</td>
+                                    <td class="zone-header">0</td>
+                                    <td class="ctrl-cell">NUL</td><td class="ctrl-cell">SOH</td><td class="ctrl-cell">STX</td><td class="ctrl-cell">ETX</td>
+                                    <td class="ctrl-cell">EOT</td><td class="ctrl-cell">ENQ</td><td class="ctrl-cell">ACK</td><td class="ctrl-cell">BEL</td>
+                                    <td class="ctrl-cell">BS</td><td class="ctrl-cell">HT</td><td class="ctrl-cell">LF</td><td class="ctrl-cell">VT</td>
+                                    <td class="ctrl-cell">FF</td><td class="ctrl-cell">CR</td><td class="ctrl-cell">SO</td><td class="ctrl-cell">SI</td>
+                                </tr>
+                                <!-- Row 1 (001) -->
+                                <tr>
+                                    <td class="zone-header">001</td>
+                                    <td class="zone-header">1</td>
+                                    <td class="ctrl-cell">DLE</td><td class="ctrl-cell">DC1</td><td class="ctrl-cell">DC2</td><td class="ctrl-cell">DC3</td>
+                                    <td class="ctrl-cell">DC4</td><td class="ctrl-cell">NAK</td><td class="ctrl-cell">SYN</td><td class="ctrl-cell">ETB</td>
+                                    <td class="ctrl-cell">CAN</td><td class="ctrl-cell">EM</td><td class="ctrl-cell">SUB</td><td class="ctrl-cell">ESC</td>
+                                    <td class="ctrl-cell">FS</td><td class="ctrl-cell">GS</td><td class="ctrl-cell">RS</td><td class="ctrl-cell">US</td>
+                                </tr>
+                                <!-- Row 2 (010) -->
+                                <tr>
+                                    <td class="zone-header">010</td>
+                                    <td class="zone-header">2</td>
+                                    <td>SP</td><td>!</td><td>"</td><td>#</td><td>$</td><td>%</td><td>&amp;</td><td>'</td>
+                                    <td>(</td><td>)</td><td>*</td><td>+</td><td>,</td><td>-</td><td>.</td><td>/</td>
+                                </tr>
+                                <!-- Row 3 (011) -->
+                                <tr>
+                                    <td class="zone-header">011</td>
+                                    <td class="zone-header">3</td>
+                                    <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td>
+                                    <td>8</td><td>9</td><td>:</td><td>;</td><td>&lt;</td><td>=</td><td>&gt;</td><td>?</td>
+                                </tr>
+                                <!-- Row 4 (100) -->
+                                <tr>
+                                    <td class="zone-header">100</td>
+                                    <td class="zone-header">4</td>
+                                    <td>@</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td>
+                                    <td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td>
+                                </tr>
+                                <!-- Row 5 (101) -->
+                                <tr>
+                                    <td class="zone-header">101</td>
+                                    <td class="zone-header">5</td>
+                                    <td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td>
+                                    <td>X</td><td>Y</td><td>Z</td><td>[</td><td>\</td><td>]</td><td>^</td><td>_</td>
+                                </tr>
+                                <!-- Row 6 (110) -->
+                                <tr>
+                                    <td class="zone-header">110</td>
+                                    <td class="zone-header">6</td>
+                                    <td>`</td><td>a</td><td>b</td><td>c</td><td>d</td><td>e</td><td>f</td><td>g</td>
+                                    <td>h</td><td>i</td><td>j</td><td>k</td><td>l</td><td>m</td><td>n</td><td>o</td>
+                                </tr>
+                                <!-- Row 7 (111) -->
+                                <tr>
+                                    <td class="zone-header">111</td>
+                                    <td class="zone-header">7</td>
+                                    <td>p</td><td>q</td><td>r</td><td>s</td><td>t</td><td>u</td><td>v</td><td>w</td>
+                                    <td>x</td><td>y</td><td>z</td><td>{</td><td>|</td><td>}</td><td>~</td><td>DEL</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-2 text-center">
+                        * 코드 조합 방법: 7비트 이진수 = ZONE(3비트) + DIGIT(4비트) (예: 'C' → ZONE 100 + DIGIT 0011 = 1000011<sub>(2)</sub>)
+                    </p>
+                </div>
+
+                <!-- 문제 입력 영역 -->
+                <div class="space-y-5">
+                    <!-- Q3-1 -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <p class="font-bold text-slate-800 mb-3">
+                            (1) [보기]의 아스키 코드표를 보고 알파벳 대문자 <span class="text-blue-600 underline font-black">'C'</span>의 값을 찾으세요.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">7비트 이진수 코드값</label>
+                                <input type="text" id="q3-1-bin"  class="w-full border-2 border-slate-300 rounded-lg p-3 font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                            </div> <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">십진수 코드값</label>
+                                <input type="number" id="q3-1-dec"  class="w-full border-2 border-slate-300 rounded-lg p-3 font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <!-- Q3-2 -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <p class="font-bold text-slate-800 mb-3">
+                            (2) 이진수 코드값 <span class="text-purple-600 underline font-black">1000100<sub>(2)</sub></span>에 해당하는 알파벳 대문자를 표에서 찾아 쓰세요.
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-semibold text-slate-600">알파벳 대문자 = </span>
+                            <input type="text" id="q3-2" class="w-32 border-2 border-slate-300 rounded-lg p-3 text-center uppercase font-black text-xl text-purple-600 focus:border-purple-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 해설 영역 -->
+                <div id="explain-3" class="hidden mt-6 p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3">
+                    <div class="font-bold text-lg border-b border-emerald-200 pb-2 flex items-center justify-between">
+                        <span><i class="fa-solid fa-square-check text-emerald-600 mr-2"></i>3번 정답 및 단계별 풀이</span>
+                        <span id="score-badge-3" class="text-sm px-3 py-1 bg-emerald-200 text-emerald-800 rounded-full font-extrabold"></span>
+                    </div>
+                    <div class="text-sm space-y-2 leading-relaxed">
+                        <p><strong>(1) 문자 'C':</strong> ZONE행 <span class="font-mono font-bold">100</span> (4)과 DIGIT열 <span class="font-mono font-bold">0011</span> (3)에 위치합니다.</p>
+                        <p class="pl-4">ㆍ 7비트 이진수: 100 + 0011 = <strong>1000011<sub>(2)</sub></strong></p>
+                        <p class="pl-4">ㆍ 십진수: 64 + 2 + 1 = <strong>67</strong></p>
+                        <p><strong>(2) 이진수 1000100<sub>(2)</sub>:</strong> ZONE <span class="font-mono font-bold">100</span> (4)과 DIGIT <span class="font-mono font-bold">0100</span> (4)이 만나는 지점의 문자는 <strong>'D'</strong> 입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 해설 영역 -->
+                <div id="explain-3" class="hidden mt-6 p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3">
+                    <div class="font-bold text-lg border-b border-emerald-200 pb-2 flex items-center justify-between">
+                        <span><i class="fa-solid fa-square-check text-emerald-600 mr-2"></i>3번 정답 및 단계별 풀이</span>
+                        <span id="score-badge-3" class="text-sm px-3 py-1 bg-emerald-200 text-emerald-800 rounded-full font-extrabold"></span>
+                    </div>
+                    <div class="text-sm space-y-2 leading-relaxed">
+                        <p><strong>(1) 문자 'C':</strong> ZONE행 <span class="font-mono font-bold">100</span> (4)과 DIGIT열 <span class="font-mono font-bold">0011</span> (3)에 위치합니다.</p>
+                        <p class="pl-4">ㆍ 8비트 이진수: 0 + 100 + 0011 = <strong>01000011<sub>(2)</sub></strong></p>
+                        <p class="pl-4">ㆍ 십진수: 64 + 2 + 1 = <strong>67</strong></p>
+                        <p><strong>(2) 이진수 01000100<sub>(2)</sub>:</strong> ZONE <span class="font-mono font-bold">100</span> (4)과 DIGIT <span class="font-mono font-bold">0100</span> (4)이 만나는 지점의 문자는 <strong>'D'</strong> 입니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 버튼 -->
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(2)" class="touch-btn bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-3 rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> 이전 문제
+                </button>
+                <div class="flex gap-3">
+                    <button onclick="checkStep3()" class="touch-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-check"></i> 정답 확인 및 해설
+                    </button>
+                    <button id="next-btn-3" onclick="goToStep(4)" disabled class="touch-btn bg-slate-300 text-slate-500 font-bold px-6 py-3 rounded-xl cursor-not-allowed flex items-center gap-2">
+                        다음 문제로 이동 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== STEP 4: 이미지의 디지털 표현 ==================== -->
+        <section id="step-4" class="step-container hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between border-b pb-4 mb-5">
+                    <span class="bg-blue-100 text-blue-700 font-extrabold px-3 py-1 rounded-full text-sm">문제 04</span>
+                    <h2 class="text-xl font-bold text-slate-800">이미지의 디지털 표현 (비트맵과 벡터 & 용량 계산)</h2>
+                </div>
+
+                <!-- Q4-1: 비트맵 vs 벡터 선택 -->
+                <div class="mb-8 bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">1</span>
+                        다음 특성이 설명하는 방식을 선택하세요. (<strong>B: 비트맵</strong> / <strong>V: 벡터</strong>)
+                    </p>
+
+                    <div class="space-y-3 mt-3">
+                        <!-- item 1 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-slate-200 gap-2">
+                            <span class="text-sm font-semibold text-slate-700">① 점(픽셀)의 모임으로 이미지를 표현하는 방식</span>
+                            <div class="flex gap-2">
+                                <button onclick="selectType(1, 'B')" id="q4-1-btn-B" class="q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100">B (비트맵)</button>
+                                <button onclick="selectType(1, 'V')" id="q4-1-btn-V" class="q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100">V (벡터)</button>
+                            </div>
+                        </div>
+
+                        <!-- item 2 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-slate-200 gap-2">
+                            <span class="text-sm font-semibold text-slate-700">② 이미지를 크게 확대해도 테두리가 깨지지 않는 방식</span>
+                            <div class="flex gap-2">
+                                <button onclick="selectType(2, 'B')" id="q4-2-btn-B" class="q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100">B (비트맵)</button>
+                                <button onclick="selectType(2, 'V')" id="q4-2-btn-V" class="q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100">V (벡터)</button>
+                            </div>
+                        </div>
+
+                        <!-- item 3 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-slate-200 gap-2">
+                            <span class="text-sm font-semibold text-slate-700">③ 사진과 같이 정교하고 복잡한 색상 변화 표현에 유리한 방식</span>
+                            <div class="flex gap-2">
+                                <button onclick="selectType(3, 'B')" id="q4-3-btn-B" class="q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100">B (비트맵)</button>
+                                <button onclick="selectType(3, 'V')" id="q4-3-btn-V" class="q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100">V (벡터)</button>
+                            </div>
+                        </div>
+
+                        <!-- item 4 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-slate-200 gap-2">
+                            <span class="text-sm font-semibold text-slate-700">④ 선과 면(도형) 중심의 수학적 계산 공식으로 표현하는 방식</span>
+                            <div class="flex gap-2">
+                                <button onclick="selectType(4, 'B')" id="q4-4-btn-B" class="q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100">B (비트맵)</button>
+                                <button onclick="selectType(4, 'V')" id="q4-4-btn-V" class="q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100">V (벡터)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q4-2: 이미지 용량 계산 -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">2</span>
+                        비트맵 이미지의 파일 용량을 계산하세요.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-slate-200">
+                            <p class="text-sm text-slate-700 mb-2 font-medium">
+                                ① 가로 10 × 세로 10 픽셀, 픽셀당 1비트(흑백) 표현 시 용량
+                            </p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <input type="number" id="q4-calc-1" placeholder="숫자 입력" class="w-full border-2 border-slate-300 rounded-lg p-2.5 font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                                <span class="font-bold text-slate-600">bit</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg border border-slate-200">
+                            <p class="text-sm text-slate-700 mb-2 font-medium">
+                                ② 가로 200 × 세로 100 픽셀, 픽셀당 24비트(트루컬러) 표현 시 KB 용량
+                            </p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <input type="number" id="q4-calc-2" placeholder="숫자 입력" class="w-full border-2 border-slate-300 rounded-lg p-2.5 font-bold text-blue-600 focus:border-blue-500 focus:outline-none">
+                                <span class="font-bold text-slate-600">KB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 해설 영역 -->
+                <div id="explain-4" class="hidden mt-6 p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3">
+                    <div class="font-bold text-lg border-b border-emerald-200 pb-2 flex items-center justify-between">
+                        <span><i class="fa-solid fa-square-check text-emerald-600 mr-2"></i>4번 정답 및 단계별 풀이</span>
+                        <span id="score-badge-4" class="text-sm px-3 py-1 bg-emerald-200 text-emerald-800 rounded-full font-extrabold"></span>
+                    </div>
+                    <div class="text-sm space-y-2 leading-relaxed">
+                        <p><strong>(1) 이미지 방식 구분:</strong></p>
+                        <p class="pl-4">① 픽셀 모임 = <strong>B (비트맵)</strong> | ② 확대해도 깨지지 않음 = <strong>V (벡터)</strong></p>
+                        <p class="pl-4">③ 복잡한 색 변화 = <strong>B (비트맵)</strong> | ④ 선과 도형 공식 = <strong>V (벡터)</strong></p>
+                        <p><strong>(2) 이미지 용량 계산:</strong></p>
+                        <p class="pl-4">① 10 × 10 × 1 bit = <strong>100 bit</strong></p>
+                        <p class="pl-4">② 200 × 100 × 24 bit = 480,000 bit</p>
+                        <p class="pl-8">→ 480,000 ÷ 8 = 60,000 Byte</p>
+                        <p class="pl-8">→ 60,000 ÷ 1,000 (또는 1024) ≈ <strong>60 KB</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 버튼 -->
+            <div class="flex justify-between items-center">
+                <button onclick="goToStep(3)" class="touch-btn bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-3 rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> 이전 문제
+                </button>
+                <div class="flex gap-3">
+                    <button onclick="checkStep4()" class="touch-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-check"></i> 정답 확인 및 해설
+                    </button>
+                    <button id="next-btn-4" onclick="goToStep(5)" disabled class="touch-btn bg-slate-300 text-slate-500 font-bold px-6 py-3 rounded-xl cursor-not-allowed flex items-center gap-2">
+                        최종 성적 리포트 보기 <i class="fa-solid fa-award"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== STEP 5: 최종 성적 리포트 ==================== -->
+        <section id="step-5" class="step-container hidden space-y-6">
+            <div class="bg-white p-8 rounded-2xl shadow-md border border-slate-200 text-center space-y-6">
+                <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">디지털 표현 수행평가 완료!</h2>
+                    <p class="text-slate-500 text-sm mt-1">수고하셨습니다. 아래에서 나의 단원별 채점 결과를 확인하세요.</p>
+                </div>
+
+                <!-- 종합 점수 카드 -->
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg max-w-md mx-auto">
+                    <p class="text-blue-100 text-sm font-semibold">최종 획득 점수</p>
+                    <div class="text-5xl font-black my-2">
+                        <span id="final-total-score">0</span> <span class="text-2xl font-normal">/ 100점</span>
+                    </div>
+                    <p id="grade-eval-text" class="text-xs bg-white/20 py-1 px-3 rounded-full inline-block mt-1 font-medium">
+                        평가 분석 중...
+                    </p>
+                </div>
+
+                <!-- 영역별 상세 점수표 -->
+                <div class="max-w-lg mx-auto text-left border border-slate-200 rounded-xl overflow-hidden">
+                    <div class="bg-slate-100 px-4 py-3 font-bold text-sm text-slate-700 border-b flex justify-between">
+                        <span>문제 영역</span>
+                        <span>획득 점수</span>
+                    </div>
+                    <div class="divide-y divide-slate-100 text-sm">
+                        <div class="px-4 py-3 flex justify-between items-center">
+                            <span>1. 자료의 단위 (비트/용량)</span>
+                            <span id="report-score-1" class="font-extrabold text-blue-600">0 / 25</span>
+                        </div>
+                        <div class="px-4 py-3 flex justify-between items-center">
+                            <span>2. 숫자의 디지털 표현 (이진수)</span>
+                            <span id="report-score-2" class="font-extrabold text-blue-600">0 / 25</span>
+                        </div>
+                        <div class="px-4 py-3 flex justify-between items-center">
+                            <span>3. 문자의 디지털 표현 (아스키)</span>
+                            <span id="report-score-3" class="font-extrabold text-blue-600">0 / 25</span>
+                        </div>
+                        <div class="px-4 py-3 flex justify-between items-center">
+                            <span>4. 이미지의 디지털 표현 (비트맵/벡터)</span>
+                            <span id="report-score-4" class="font-extrabold text-blue-600">0 / 25</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 재도전 및 인쇄/복사 버튼 -->
+                <div class="pt-4 flex justify-center gap-4">
+                    <button onclick="goToStep(1)" class="touch-btn bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-6 py-3 rounded-xl flex items-center gap-2">
+                        <i class="fa-solid fa-list-check"></i> 답안 다시 검토
+                    </button>
+                    <button onclick="resetApp()" class="touch-btn bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> 처음부터 다시 풀기
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 태블릿 QR 코드 실시간 모달 -->
+    <div id="qr-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl relative space-y-4">
+            <button onclick="closeQrModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-3 border-b pb-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-slate-800">태블릿 화면 연결 QR 코드</h3>
+                    <p class="text-xs text-slate-500">외부 태블릿 카메라로 접속할 주소를 생성합니다.</p>
+                </div>
+            </div>
+
+            <!-- 안내 문구 -->
+            <div class="bg-amber-50 border border-amber-200 text-amber-900 text-xs p-3 rounded-xl leading-relaxed">
+                <p class="font-bold mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> 샌드박스 미리보기 사용 안내</p>
+                현재 보고 계신 화면의 URL은 AI 가상 환경 내부 주소입니다. 태블릿으로 직접 접속하려면 선생님께서 <strong>실제 배포된 웹사이트 주소</strong>나 <strong>로컬 IP (예: http://192.168.0.x:8000)</strong>를 아래에 입력해 주세요.
+            </div>
+
+            <!-- URL 입력란 -->
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">접속할 웹사이트 URL 입력</label>
+                <div class="flex gap-2">
+                    <input type="text" id="qr-url-input" class="flex-1 border-2 border-slate-300 rounded-lg px-3 py-2 text-sm font-mono focus:border-purple-500 focus:outline-none" placeholder="https:// 또는 http://">
+                    <button onclick="updateQrCode()" class="touch-btn bg-purple-600 text-white font-bold px-4 py-2 rounded-lg text-sm">생성</button>
+                </div>
+            </div>
+
+            <!-- QR 코드 이미지 출력 -->
+            <div class="bg-slate-100 p-4 rounded-xl flex flex-col items-center justify-center">
+                <img id="qr-image" src="" alt="QR Code" class="w-48 h-48 bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
+                <p id="qr-url-display" class="text-xs text-slate-500 font-mono mt-3 break-all text-center px-2">https://...</p>
+            </div>
+
+            <div class="flex justify-between items-center gap-2 pt-2">
+                <button onclick="copyCurrentUrl()" class="touch-btn flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 border border-slate-200">
+                    <i class="fa-solid fa-copy"></i> 주소 복사하기
+                </button>
+                <button onclick="closeQrModal()" class="touch-btn bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+        중학교 1학년 정보 교육과정 [디지털 표현] 수행평가 대비 애플리케이션
+    </footer>
+
+    <!-- 자바스크립트 로직 -->
+    <script>
+        // 전역 상태 변수
+        let currentStep = 1;
+        const scores = { 1: 0, 2: 0, 3: 0, 4: 0 };
+        const stepChecked = { 1: false, 2: false, 3: false, 4: false };
+
+        // Q4 비트맵/벡터 선택 저장
+        const q4Answers = { 1: '', 2: '', 3: '', 4: '' };
+
+        // 입력창 채점 결과 스타일 적용 함수
+        function markInput(elementId, isCorrect) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            el.classList.remove('border-slate-300', 'border-blue-500', 'focus:border-blue-500', 'border-red-500', 'border-emerald-500', 'bg-white', 'bg-red-50', 'bg-emerald-50', 'text-blue-600', 'text-red-600', 'text-emerald-700', 'text-slate-700');
+            if (isCorrect) {
+                el.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+            } else {
+                el.classList.add('border-red-500', 'bg-red-50', 'text-red-600');
+            }
+        }
+
+        // 스텝 이동 함수
+        function goToStep(stepNum) {
+            currentStep = stepNum;
+
+            // 스텝 컨테이너 토글
+            document.querySelectorAll('.step-container').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step-${stepNum}`).classList.remove('hidden');
+
+            // 탭 스타일 업데이트
+            for (let i = 1; i <= 5; i++) {
+                const tab = document.getElementById(`step-tab-${i}`);
+                
+                let tabText = "";
+                switch(i) {
+                    case 1: tabText = "1. 자료의 단위"; break;
+                    case 2: tabText = "2. 숫자의 표현"; break;
+                    case 3: tabText = "3. 문자의 표현"; break;
+                    case 4: tabText = "4. 이미지 표현"; break;
+                    case 5: tabText = "5. 성적 리포트"; break;
+                }
+
+                // 완료된 스텝에 체크 표시 추가
+                if (stepChecked[i] || (i===5 && Object.values(stepChecked).every(v=>v))) {
+                    tabText = `<i class="fa-solid fa-check-circle text-emerald-400 mr-1"></i> ${tabText}`;
+                }
+
+                tab.innerHTML = tabText;
+
+                if (i === stepNum) {
+                    tab.className = "step-tab flex-1 text-center py-1.5 rounded-lg bg-blue-600 text-white shadow-sm font-bold transition-all cursor-pointer";
+                } else if (stepChecked[i]) {
+                    tab.className = "step-tab flex-1 text-center py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 font-semibold transition-all cursor-pointer hover:bg-blue-100";
+                } else {
+                    tab.className = "step-tab flex-1 text-center py-1.5 rounded-lg text-slate-500 bg-white border border-slate-200 transition-all cursor-pointer hover:bg-slate-50";
+                }
+            }
+
+            // 리포트 페이지 진입 시 점수 계산
+            if (stepNum === 5) {
+                renderFinalReport();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==================== STEP 1 정답 체크 ====================
+        function checkStep1() {
+            const v1_1 = document.getElementById('q1-1-1').value.trim().toLowerCase();
+            const v1_2 = document.getElementById('q1-1-2').value.trim().toLowerCase();
+
+            const v2_1 = document.getElementById('q1-2-1').value.trim().toUpperCase();
+            const v2_2 = document.getElementById('q1-2-2').value.trim().toUpperCase();
+            const v2_3 = document.getElementById('q1-2-3').value.trim().toUpperCase();
+            const v2_4 = document.getElementById('q1-2-4').value.trim().toUpperCase();
+            const v2_5 = document.getElementById('q1-2-5').value.trim().toUpperCase();
+
+            const v3 = document.getElementById('q1-3').value.trim();
+
+            let subScores = 0;
+
+            // (1) 비트 / 바이트
+            const isV1_1 = (v1_1 === '비트' || v1_1 === 'bit');
+            const isV1_2 = (v1_2 === '바이트' || v1_2 === 'byte' || v1_2 === 'b');
+            if (isV1_1) subScores += 4;
+            if (isV1_2) subScores += 4;
+            markInput('q1-1-1', isV1_1);
+            markInput('q1-1-2', isV1_2);
+
+            // (2) KB -> MB -> GB -> TB -> PB
+            const isV2_1 = (v2_1 === 'KB');
+            const isV2_2 = (v2_2 === 'MB');
+            const isV2_3 = (v2_3 === 'GB');
+            const isV2_4 = (v2_4 === 'TB');
+            const isV2_5 = (v2_5 === 'PB');
+            if (isV2_1 && isV2_2 && isV2_3 && isV2_4 && isV2_5) {
+                subScores += 10;
+            }
+            markInput('q1-2-1', isV2_1);
+            markInput('q1-2-2', isV2_2);
+            markInput('q1-2-3', isV2_3);
+            markInput('q1-2-4', isV2_4);
+            markInput('q1-2-5', isV2_5);
+
+            // (3) 2048 KB = 2 MB
+            const isV3 = (v3 === '2');
+            if (isV3) subScores += 7;
+            markInput('q1-3', isV3);
+
+            scores[1] = subScores;
+            stepChecked[1] = true;
+
+            // 해설 및 버튼 활성화 (이동 시 UI 갱신을 위해 goToStep 다시 호출)
+            goToStep(1); 
+            document.getElementById('score-badge-1').innerText = `획득 점수: ${subScores} / 25점`;
+            document.getElementById('explain-1').classList.remove('hidden');
+            
+            const nextBtn = document.getElementById('next-btn-1');
+            nextBtn.disabled = false;
+            nextBtn.className = "touch-btn bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2";
+        }
+
+        // ==================== STEP 2 정답 체크 ====================
+        function checkStep2() {
+            const v1 = document.getElementById('q2-1').value.trim();
+            const v2 = document.getElementById('q2-2').value.trim();
+            const v3 = document.getElementById('q2-3').value.trim();
+            const v4 = document.getElementById('q2-4').value.trim();
+
+            let subScores = 0;
+
+            const isV1 = (v1 === '14');
+            const isV2 = (v2 === '100011');
+            const isV3 = (v3 === '363');
+            const isV4 = (v4 === '1111110');
+
+            if (isV1) subScores += 6;
+            if (isV2) subScores += 6;
+            if (isV3) subScores += 6;
+            if (isV4) subScores += 7;
+
+            markInput('q2-1', isV1);
+            markInput('q2-2', isV2);
+            markInput('q2-3', isV3);
+            markInput('q2-4', isV4);
+
+            scores[2] = subScores;
+            stepChecked[2] = true;
+
+            goToStep(2);
+            document.getElementById('score-badge-2').innerText = `획득 점수: ${subScores} / 25점`;
+            document.getElementById('explain-2').classList.remove('hidden');
+
+            const nextBtn = document.getElementById('next-btn-2');
+            nextBtn.disabled = false;
+            nextBtn.className = "touch-btn bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2";
+        }
+
+        // ==================== STEP 3 정답 체크 ====================
+        function checkStep3() {
+            const dec = document.getElementById('q3-1-dec').value.trim();
+            const bin = document.getElementById('q3-1-bin').value.trim();
+            const charVal = document.getElementById('q3-2').value.trim().toUpperCase();
+
+            let subScores = 0;
+
+            const isDec = (dec === '67');
+            const isBin = (bin === '1000011' || bin === '01000011');
+            const isChar = (charVal === 'D');
+
+            if (isDec) subScores += 8;
+            if (isBin) subScores += 8;
+            if (isChar) subScores += 9;
+
+            markInput('q3-1-dec', isDec);
+            markInput('q3-1-bin', isBin);
+            markInput('q3-2', isChar);
+
+            scores[3] = subScores;
+            stepChecked[3] = true;
+
+            goToStep(3);
+            document.getElementById('score-badge-3').innerText = `획득 점수: ${subScores} / 25점`;
+            document.getElementById('explain-3').classList.remove('hidden');
+
+            const nextBtn = document.getElementById('next-btn-3');
+            nextBtn.disabled = false;
+            nextBtn.className = "touch-btn bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2";
+        }
+
+        // ==================== STEP 4 선택 및 정답 체크 ====================
+        function selectType(itemNum, type) {
+            q4Answers[itemNum] = type;
+            
+            const btnB = document.getElementById(`q4-${itemNum}-btn-B`);
+            const btnV = document.getElementById(`q4-${itemNum}-btn-V`);
+            
+            // 기존 오답 표기 초기화
+            btnB.classList.remove('border-red-500', 'bg-red-50');
+            btnV.classList.remove('border-red-500', 'bg-red-50');
+
+            if (type === 'B') {
+                btnB.className = "q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold bg-blue-600 text-white shadow-sm border border-blue-600";
+                btnV.className = "q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100 bg-white";
+            } else {
+                btnV.className = "q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold bg-purple-600 text-white shadow-sm border border-purple-600";
+                btnB.className = "q4-type-btn touch-btn px-5 py-2 rounded-lg font-bold border border-slate-300 text-slate-600 hover:bg-slate-100 bg-white";
+            }
+        }
+
+        function checkStep4() {
+            let subScores = 0;
+
+            // (1) B, V, B, V
+            const is1 = q4Answers[1] === 'B';
+            const is2 = q4Answers[2] === 'V';
+            const is3 = q4Answers[3] === 'B';
+            const is4 = q4Answers[4] === 'V';
+            
+            if (is1) subScores += 3;
+            if (is2) subScores += 3;
+            if (is3) subScores += 3;
+            if (is4) subScores += 3;
+
+            // 오답 버튼 스타일 표시
+            [1, 2, 3, 4].forEach(i => {
+                const btnB = document.getElementById(`q4-${i}-btn-B`);
+                const btnV = document.getElementById(`q4-${i}-btn-V`);
+                const ans = q4Answers[i];
+                const correctAns = [undefined, 'B', 'V', 'B', 'V'][i];
+                
+                if (ans && ans !== correctAns) {
+                    const wrongBtn = ans === 'B' ? btnB : btnV;
+                    wrongBtn.classList.remove('border-blue-600', 'bg-blue-600', 'border-purple-600', 'bg-purple-600', 'text-white');
+                    wrongBtn.classList.add('border-red-500', 'bg-red-50', 'text-red-600');
+                }
+            });
+
+            // (2) 용량 계산 100bit / 60KB
+            const c1 = document.getElementById('q4-calc-1').value.trim();
+            const c2 = document.getElementById('q4-calc-2').value.trim();
+
+            const isC1 = (c1 === '100');
+            const isC2 = (c2 === '60');
+
+            if (isC1) subScores += 6;
+            if (isC2) subScores += 7;
+
+            markInput('q4-calc-1', isC1);
+            markInput('q4-calc-2', isC2);
+
+            scores[4] = subScores;
+            stepChecked[4] = true;
+
+            goToStep(4);
+            document.getElementById('score-badge-4').innerText = `획득 점수: ${subScores} / 25점`;
+            document.getElementById('explain-4').classList.remove('hidden');
+
+            const nextBtn = document.getElementById('next-btn-4');
+            nextBtn.disabled = false;
+            nextBtn.className = "touch-btn bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2";
+        }
+
+        // ==================== 최종 성적 리포트 계산 ====================
+        function renderFinalReport() {
+            const total = scores[1] + scores[2] + scores[3] + scores[4];
+            
+            document.getElementById('final-total-score').innerText = total;
+            document.getElementById('report-score-1').innerText = `${scores[1]} / 25점`;
+            document.getElementById('report-score-2').innerText = `${scores[2]} / 25점`;
+            document.getElementById('report-score-3').innerText = `${scores[3]} / 25점`;
+            document.getElementById('report-score-4').innerText = `${scores[4]} / 25점`;
+
+            const evalText = document.getElementById('grade-eval-text');
+            if (total === 100) {
+                evalText.innerText = "🎉 완벽합니다! 디지털 표현 단원을 마스터하셨습니다.";
+            } else if (total >= 80) {
+                evalText.innerText = "👍 아주 훌륭합니다! 틀린 문제를 다시 확인해보세요.";
+            } else if (total >= 60) {
+                evalText.innerText = "🙂 양호합니다. 해설을 읽고 개념을 복습해보세요.";
+            } else {
+                evalText.innerText = "💪 차근차근 다시 풀어보며 개념을 다져보세요!";
+            }
+        }
+
+        // ==================== 초기화 ====================
+        function resetApp() {
+            if (confirm("모든 입력 내용과 점수를 초기화하고 처음부터 다시 시작하시겠습니까?")) {
+                location.reload();
+            }
+        }
+
+        // ==================== QR 모달 기능 ====================
+        function openQrModal() {
+            const modal = document.getElementById('qr-modal');
+            const input = document.getElementById('qr-url-input');
+
+            // 기본값으로 현재 브라우저 주소 설정
+            let currentUrl = window.location.href;
+            if (currentUrl.startsWith('about:') || currentUrl.startsWith('data:')) {
+                currentUrl = "https://your-school-app.netlify.app";
+            }
+            
+            input.value = currentUrl;
+            updateQrCode();
+            modal.classList.remove('hidden');
+        }
+
+        function closeQrModal() {
+            document.getElementById('qr-modal').classList.add('hidden');
+        }
+
+        function updateQrCode() {
+            const url = document.getElementById('qr-url-input').value.trim();
+            const qrImg = document.getElementById('qr-image');
+            const qrDisplay = document.getElementById('qr-url-display');
+
+            if (!url) return;
+
+            // QuickChart QR API를 사용하여 실시간 QR코드 생성
+            const qrApiUrl = `https://quickchart.io/qr?text=${encodeURIComponent(url)}&size=200&margin=1`;
+            qrImg.src = qrApiUrl;
+            qrDisplay.innerText = url;
+        }
+
+        function copyCurrentUrl() {
+            const urlInput = document.getElementById('qr-url-input');
+            urlInput.select();
+            document.execCommand('copy');
+            alert('웹사이트 주소가 클립보드에 복사되었습니다!');
+        }
+    </script>
+</body>
+</html>
